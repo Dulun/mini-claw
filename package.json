@@ -20,9 +20,16 @@
     "claude",
     "computer-use"
   ],
+  "imports": {
+    "#rawconfig": "./config.json",
+    "#config": "./src/config/index.js",
+    "#tools": "./src/tools/index.js",
+    "#core": "./src/core/index.js",
+    "#utils": "./src/utils/index.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "node --env-file=.env src/tests/index.js"
   },
   "dependencies": {
     "@inquirer/prompts": "^8.4.3",
@@ -30,6 +37,7 @@
     "fs-extra": "^11.3.5",
     "globby": "^16.2.0",
     "openai": "^6.39.0",
-    "ora": "^9.4.0"
+    "ora": "^9.4.0",
+    "zod": "^4.4.3"
   }
 }

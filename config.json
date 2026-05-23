@@ -1,0 +1,44 @@
+{
+  "agents": {
+    "defaults": {
+      "models": {
+        "Xiaomi/mimo-v2.5": {
+          "alias": "mimo-v2.5"
+        },
+        "deepseek/deepseek-v4-flash": {
+          "alias": "deepseek-v4-flash"
+        }
+      }
+    },
+    "model": {
+      "primary": {
+        "provider": "Xiaomi",
+        "model": "mimo-v2.5"
+      }
+    }
+  },
+  "models": {
+    "providers": {
+      "Xiaomi": {
+        "models": [
+          {
+            "name": "mimo-v2.5",
+            "baseURL": "https://token-plan-cn.xiaomimimo.com/v1"
+          },
+          {
+            "name": "mimo-v2.5-tts",
+            "baseURL": "https://token-plan-cn.xiaomimimo.com/v1"
+          }
+        ]
+      },
+      "deepseek": {
+        "models": [
+          {
+            "name": "deepseek-v4-flash",
+            "baseURL": "https://flashapi.deepseek.com/v1"
+          }
+        ]
+      }
+    }
+  }
+}
