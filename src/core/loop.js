@@ -34,7 +34,6 @@ const loop = async () => {
     // push user message
     pushUserMessage(userInput)
 
-    // loading
     const spinner = ora('AI 正在思考...').start()
 
     try {
