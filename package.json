@@ -10,11 +10,16 @@
     "type": "git",
     "url": "git+https://github.com/Dulun/mini-claw.git"
   },
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
+  "license": "Apache-2.0",
+  "author": "dulun",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "openai": "^6.39.0"
   }
 }
