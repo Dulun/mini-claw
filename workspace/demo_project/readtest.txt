@@ -1,0 +1,1 @@
+This is a test file to demonstrate the file editing and code suggestion features of the system. It contains some sample code snippets and changes that have been made recently. The file is located at workspace/demo_project/readtest.txt.

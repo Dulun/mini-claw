@@ -2,6 +2,8 @@ import { OpenAI } from 'openai'
 import { input } from '@inquirer/prompts'
 import ora from 'ora'
 import dotenv from 'dotenv'
+import { TOOL_SCHEMAS } from './tools/index.js'
+import { TOOLS } from './tools/index.js'
 
 dotenv.config()
 const MESSAGES = []
@@ -47,9 +49,33 @@ const chat = async (msg) => {
     const response = await client.chat.completions.create({
       model: MODEL,
       messages,
+      tools: TOOL_SCHEMAS,
     })
 
-    pushMessage(response.choices[0].message)
+    const message = response.choices[0].message
+    if (!!message.tool_calls) {
+      for (const toolCall of message.tool_calls) {
+        console.log(
+          toolCall,
+          '工具调用:',
+          toolCall.function.name,
+          toolCall.function.arguments,
+        )
+        const toolName = toolCall.function.name
+        const args = JSON.parse(toolCall.function.arguments)
+
+        // important: how toolcalling acturally works
+        // 这里应该有个超时机制，防止工具调用卡死
+        const result = await TOOLS[toolName](args)
+      }
+    }
+
+    pushMessage({
+      role: 'tool',
+      tool_call_id: toolCall.id,
+      content: JSON.stringify(result),
+    })
+    messages.push()
     return response.choices[0].message.content
     // console.log(response.choices[0].message.content)
   } catch (error) {
