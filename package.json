@@ -13,13 +13,21 @@
   "license": "Apache-2.0",
   "author": "dulun",
   "type": "module",
-  "main": "index.js",
+  "main": "src/index.js",
+  "keywords": [
+    "ai",
+    "automation",
+    "claude",
+    "computer-use"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
+    "@inquirer/prompts": "^8.4.3",
     "dotenv": "^17.4.2",
-    "openai": "^6.39.0"
+    "openai": "^6.39.0",
+    "ora": "^9.4.0"
   }
 }
