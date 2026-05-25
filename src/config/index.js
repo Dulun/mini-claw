@@ -56,6 +56,7 @@ const provider = primary.provider
 const model = primary.model
 
 const config = {
+  model,
   baseURL: _config.models.providers[provider].models.find(
     (m) => m.name === model,
   ).baseURL,

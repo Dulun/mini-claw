@@ -1,4 +1,16 @@
 import 'dotenv/config'
 import { loop } from '#core'
+import {
+  logRuntimeStart,
+  logRuntimeExit,
+  logRuntimeError,
+} from '#logger'
 
-await loop()
+try {
+  logRuntimeStart()
+  await loop()
+} catch (error) {
+  logRuntimeError(error)
+} finally {
+  logRuntimeExit()
+}

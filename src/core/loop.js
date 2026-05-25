@@ -1,7 +1,21 @@
 import { input } from '@inquirer/prompts'
 import ora from 'ora'
 import { TOOLS, TOOL_SCHEMAS } from '#tools'
-import openAiClient from './createOpenAIClient.js'
+import config from '#config'
+import requestLLM from './runtime/requestLLM.js'
+import executeToolCallsAsync from './runtime/executeToolCalls.js'
+import {
+  logRuntimeStart,
+  logRuntimeExit,
+  logUserInput,
+  logLLMRequest,
+  logLLMResponse,
+  logToolExecute,
+  logToolResult,
+  logToolError,
+  logAssistantMessage,
+  logRuntimeError,
+} from '#logger'
 
 import {
   pushUserMessage,
@@ -13,7 +27,7 @@ import {
   printMessages,
 } from './messages.js'
 
-const MODEL = 'mimo-v2.5'
+const MODEL = config.model
 
 const loop = async () => {
   while (true) {
@@ -30,8 +44,8 @@ const loop = async () => {
       console.log('Exiting...')
       break
     }
-
     // push user message
+    logUserInput(userInput)
     pushUserMessage(userInput)
 
     const spinner = ora('AI 正在思考...').start()
@@ -42,14 +56,11 @@ const loop = async () => {
       // =========================
 
       while (true) {
-        const response =
-          await openAiClient.chat.completions.create({
-            model: MODEL,
-
-            messages: getMessages(),
-
-            tools: TOOL_SCHEMAS,
-          })
+        logLLMRequest({
+          model: MODEL,
+          messages: getMessages(),
+        })
+        const response = await requestLLM(getMessages())
 
         const message = response.choices[0].message
 
@@ -60,31 +71,16 @@ const loop = async () => {
         if (message.tool_calls) {
           // push assistant tool call message
           pushAssistantToolCallMessage(message)
-
-          // execute all tools
-          for (const toolCall of message.tool_calls) {
-            const toolName = toolCall.function.name
-
-            const args = JSON.parse(
-              toolCall.function.arguments,
-            )
-
-            console.log(`\n[TOOL] ${toolName}`)
-
-            // execute tool
-            const result = await TOOLS[toolName](args)
-
-            // push tool result
-            pushToolMessage(toolCall.id, result)
-          }
-
-          // continue thinking
+          // execute tool calls
+          await executeToolCallsAsync(message.tool_calls)
           continue
         }
 
         // =========================
         // Final Assistant Response
         // =========================
+        logLLMResponse(response)
+        logAssistantMessage(message.content)
         pushAssistantMessage(message.content)
 
         spinner.succeed('AI: ' + message.content)
@@ -95,8 +91,8 @@ const loop = async () => {
         break
       }
     } catch (error) {
+      logRuntimeError(error)
       spinner.fail('出错了')
-
       console.error(error)
     }
   }

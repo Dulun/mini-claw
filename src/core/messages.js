@@ -30,7 +30,6 @@
  *
  * ============================================
  */
-
 const MAX_CONTEXT_CHARS = 50000
 const MAX_TOOL_CONTENT_LENGTH = 10000
 
@@ -42,7 +41,6 @@ const MESSAGES = []
 
 export function pushMessage(message) {
   MESSAGES.push(message)
-
   return message
 }
 
@@ -91,9 +89,7 @@ export function pushAssistantMessage(content) {
   })
 }
 
-export function pushAssistantToolCallMessage(
-  message,
-) {
+export function pushAssistantToolCallMessage(message) {
   return pushMessage({
     role: 'assistant',
     tool_calls: message.tool_calls,
@@ -104,24 +100,17 @@ export function pushAssistantToolCallMessage(
 // Tool
 // ============================================
 
-export function pushToolMessage(
-  toolCallId,
-  result,
-) {
-  const safeResult =
-    structuredClone(result)
+export function pushToolMessage(toolCallId, result) {
+  const safeResult = structuredClone(result)
 
   // 只截断 content
   if (
     typeof safeResult.content === 'string' &&
-    safeResult.content.length >
-      MAX_TOOL_CONTENT_LENGTH
+    safeResult.content.length > MAX_TOOL_CONTENT_LENGTH
   ) {
     safeResult.content =
-      safeResult.content.slice(
-        0,
-        MAX_TOOL_CONTENT_LENGTH,
-      ) + '\n...[TRUNCATED]'
+      safeResult.content.slice(0, MAX_TOOL_CONTENT_LENGTH) +
+      '\n...[TRUNCATED]'
 
     safeResult.truncated = true
   }
@@ -137,9 +126,7 @@ export function pushToolMessage(
 // Context Size
 // ============================================
 
-export function getContextSize(
-  messages = MESSAGES,
-) {
+export function getContextSize(messages = MESSAGES) {
   return JSON.stringify(messages).length
 }
 
@@ -212,25 +199,18 @@ export function buildChunks() {
  */
 export function trimMessages() {
   const systemMessage =
-    MESSAGES[0]?.role === 'system'
-      ? MESSAGES[0]
-      : null
+    MESSAGES[0]?.role === 'system' ? MESSAGES[0] : null
 
   const chunks = buildChunks()
 
   // 当前 context size
   let currentMessages = [
-    ...(systemMessage
-      ? [systemMessage]
-      : []),
+    ...(systemMessage ? [systemMessage] : []),
 
-    ...chunks.flatMap(
-      (chunk) => chunk.messages,
-    ),
+    ...chunks.flatMap((chunk) => chunk.messages),
   ]
 
-  let currentSize =
-    getContextSize(currentMessages)
+  let currentSize = getContextSize(currentMessages)
 
   // 不需要 trim
   if (currentSize <= MAX_CONTEXT_CHARS) {
@@ -248,17 +228,12 @@ export function trimMessages() {
     chunks.shift()
 
     currentMessages = [
-      ...(systemMessage
-        ? [systemMessage]
-        : []),
+      ...(systemMessage ? [systemMessage] : []),
 
-      ...chunks.flatMap(
-        (chunk) => chunk.messages,
-      ),
+      ...chunks.flatMap((chunk) => chunk.messages),
     ]
 
-    currentSize =
-      getContextSize(currentMessages)
+    currentSize = getContextSize(currentMessages)
   }
 
   // 重建 MESSAGES
@@ -278,15 +253,11 @@ export function trimMessages() {
 // ============================================
 
 export function printMessages() {
-  console.log(
-    JSON.stringify(MESSAGES, null, 2),
-  )
+  console.log(JSON.stringify(MESSAGES, null, 2))
 }
 
 export function printChunks() {
-  console.log(
-    JSON.stringify(buildChunks(), null, 2),
-  )
+  console.log(JSON.stringify(buildChunks(), null, 2))
 }
 
 // ============================================
@@ -303,7 +274,6 @@ export function printChunks() {
  */
 export function summarizeMessages() {
   return {
-    summary:
-      'summary not implemented yet',
+    summary: 'summary not implemented yet',
   }
 }
