@@ -82,18 +82,12 @@ export function pushUserMessage(content) {
 // Assistant
 // ============================================
 
-export function pushAssistantMessage(content) {
-  return pushMessage({
-    role: 'assistant',
-    content,
-  })
+export function pushAssistantMessage(message) {
+  return pushMessage(message)
 }
 
 export function pushAssistantToolCallMessage(message) {
-  return pushMessage({
-    role: 'assistant',
-    tool_calls: message.tool_calls,
-  })
+  return pushMessage(message)
 }
 
 // ============================================

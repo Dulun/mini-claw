@@ -1,6 +1,7 @@
 import config from '#config'
 import { TOOLS, TOOL_SCHEMAS } from '#tools'
 import openAiClient from '#src/infra/llm/createOpenAIClient.js'
+import { en } from 'zod/locales'
 
 const model = config.model
 
@@ -10,6 +11,9 @@ const requestLLM = async (messages) => {
       model,
       messages,
       tools: TOOL_SCHEMAS,
+      // thinking: {
+      //   type: 'disabled',
+      // },
     })
   return response
 }

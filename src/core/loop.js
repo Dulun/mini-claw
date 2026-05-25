@@ -81,7 +81,7 @@ const loop = async () => {
         // =========================
         logLLMResponse(response)
         logAssistantMessage(message.content)
-        pushAssistantMessage(message.content)
+        pushAssistantMessage(message)
 
         spinner.succeed('AI: ' + message.content)
 

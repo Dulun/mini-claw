@@ -7,6 +7,9 @@
         },
         "deepseek/deepseek-v4-flash": {
           "alias": "deepseek-v4-flash"
+        },
+        "deepseek/deepseek-v4-pro": {
+          "alias": "deepseek-v4-pro"
         }
       }
     },
@@ -35,7 +38,11 @@
         "models": [
           {
             "name": "deepseek-v4-flash",
-            "baseURL": "https://flashapi.deepseek.com/v1"
+            "baseURL": "https://api.deepseek.com"
+          },
+          {
+            "name": "deepseek-v4-pro",
+            "baseURL": "https://api.deepseek.com"
           }
         ]
       }
